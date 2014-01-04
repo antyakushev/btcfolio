@@ -58,6 +58,12 @@ function btcfolio(cryptos){
 	      	console.log(err);
 	    }
 	    console.log("which is "+data.ticker.avg*btctotal+" $");
+	    btce.ticker("btc_rur", function(err, data) {
+			if (err) {
+		      	console.log(err);
+		    }
+		    console.log("or "+data.ticker.avg*btctotal+" RUR");
+		});
 	});
 
 }
