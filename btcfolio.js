@@ -1,19 +1,17 @@
 try{
     var config = require('./config.json');
 } catch(err){
-    config = config||{"key":"YOUR_KEY","secret":"yoursecret"};
+    console.err('config.json not found');
+    process.exit();
 }
 var BTCE = require('btc-e'),
     btce = new BTCE(config.key, config.secret);
 var counter = 0;
 var funds;
 var cryptos = {};
-function isRealCurrency(c){
-	if (c=='usd'||c=='rur'||c=='eur') {
-		return true;
-	} else {
-		return false;
-	}
+var fiats = {usd:{},rur:{},eur:{}}
+function isFiat(c){
+	return c in fiats;
 }
 
 btce.getInfo(function(err, info) {
@@ -24,7 +22,7 @@ btce.getInfo(function(err, info) {
   	funds = info.funds;
   
   	for (var fund in info.funds) {
-  		if (typeof fund!='undefined' && !isRealCurrency(fund) && fund!='btc') {
+  		if (typeof fund!='undefined' && !isFiat(fund) && fund!='btc') {
 	  		//console.log(info);
 	  		counter++;
 	  		(function(){
